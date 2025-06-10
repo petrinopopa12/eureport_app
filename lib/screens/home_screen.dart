@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'create_report_screen.dart';
 import 'view_reports_screen.dart';
+import 'report_summary_chart_screen.dart'; // 👈 Add this import
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,9 +12,9 @@ class HomeScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFEFEFF4), // Light neutral background
+      backgroundColor: const Color(0xFFEFEFF4),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF003399), // EU Blue
+        backgroundColor: const Color(0xFF003399),
         title: const Text(
           'EUReport Home',
           style: TextStyle(color: Colors.white),
@@ -34,7 +35,6 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // EU emblem or stars row
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -60,11 +60,7 @@ class HomeScreen extends StatelessWidget {
               ElevatedButton.icon(
                 icon: const Icon(Icons.report),
                 label: const Text('Create Report'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF003399), // EU blue
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
+                style: _euButtonStyle(),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -76,11 +72,7 @@ class HomeScreen extends StatelessWidget {
               ElevatedButton.icon(
                 icon: const Icon(Icons.list_alt),
                 label: const Text('View My Reports'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF003399),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
+                style: _euButtonStyle(),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -88,10 +80,30 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.bar_chart),
+                label: const Text('Report Summary'),
+                style: _euButtonStyle(),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ReportSummaryChartScreen()),
+                  );
+                },
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  ButtonStyle _euButtonStyle() {
+    return ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF003399),
+      foregroundColor: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
     );
   }
 }
