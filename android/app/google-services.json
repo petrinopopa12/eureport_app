@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "108464348168",
+    "project_id": "eureport-b3f75",
+    "storage_bucket": "eureport-b3f75.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108464348168:android:bef6dd79c49606b63b05bd",
+        "android_client_info": {
+          "package_name": "com.example.eureport_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqyT5Ai_p6KBu58U19nIns9CnBBIDwgo8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
