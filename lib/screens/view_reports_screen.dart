@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'edit_report_screen.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ViewReportsScreen extends StatelessWidget {
   const ViewReportsScreen({super.key});
@@ -49,7 +51,14 @@ class ViewReportsScreen extends StatelessWidget {
                   : 'No Date';
 
               return ListTile(
-  leading: const Icon(Icons.description),
+  leading: report['imageUrl'] != null
+      ? Image.network(
+          report['imageUrl'],
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover,
+        )
+      : const Icon(Icons.description),
   title: Text(title),
   subtitle: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +92,70 @@ class ViewReportsScreen extends StatelessWidget {
       ),
     ],
   ),
-  trailing: Text(dateStr),
+  trailing: Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    IconButton(
+      icon: const Icon(Icons.edit, color: Colors.blue),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditReportScreen(
+              reportId: reports[index].id,
+              reportData: report,
+            ),
+          ),
+        );
+      },
+    ),
+    IconButton(
+      icon: const Icon(Icons.delete, color: Colors.red),
+      onPressed: () async {
+        final confirm = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Delete Report'),
+            content: const Text('Are you sure you want to delete this report?'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(false),
+                  child: const Text('Cancel')),
+              TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(true),
+                  child: const Text('Delete')),
+            ],
+          ),
+        );
+
+        if (confirm == true) {
+          final docId = reports[index].id;
+
+          try {
+            // Delete Firestore document
+            await FirebaseFirestore.instance.collection('reports').doc(docId).delete();
+
+            // Delete image from Firebase Storage if it exists
+            final imageUrl = report['imageUrl'];
+            if (imageUrl != null) {
+              final ref = FirebaseStorage.instance.refFromURL(imageUrl);
+              await ref.delete();
+            }
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Report deleted successfully.')),
+            );
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Failed to delete report: $e')),
+            );
+          }
+        }
+      },
+    ),
+  ],
+),
+
 );
             },
           );

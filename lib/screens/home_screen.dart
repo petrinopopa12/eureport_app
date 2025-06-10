@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'create_report_screen.dart';
-import 'view_reports_screen.dart'; // ✅ 1. Import the new screen
+import 'view_reports_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,71 +11,85 @@ class HomeScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFEFEFF4), // Light neutral background
       appBar: AppBar(
-        title: const Text('Home'),
+        backgroundColor: const Color(0xFF003399), // EU Blue
+        title: const Text(
+          'EUReport Home',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, color: Colors.white),
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
               Navigator.of(context).popUntil((route) => route.isFirst);
             },
-          )
+          ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.check_box, color: Colors.green),
-                SizedBox(width: 8),
-                Text('Logged in', style: TextStyle(fontSize: 18)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text("Welcome, ${user?.email ?? 'User'}"),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.report),
-              label: const Text('Create Report'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CreateReportScreen()),
-                );
-              },
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.list_alt),
-              label: const Text('View My Reports'), // ✅ 2. New button
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ViewReportsScreen()),
-                );
-              },
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.location_on),
-              label: const Text('Get Location'),
-              onPressed: () {
-                // To be implemented
-              },
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.camera_alt),
-              label: const Text('Open Camera'),
-              onPressed: () {
-                // To be implemented
-              },
-            ),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // EU emblem or stars row
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.star, color: Color(0xFFFFCC00), size: 28),
+                  SizedBox(width: 8),
+                  Text(
+                    'Welcome to EUReport',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF003399),
+                    ),
+                  ),
+                  Icon(Icons.star, color: Color(0xFFFFCC00), size: 28),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "Logged in as: ${user?.email ?? 'User'}",
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.report),
+                label: const Text('Create Report'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF003399), // EU blue
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CreateReportScreen()),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.list_alt),
+                label: const Text('View My Reports'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF003399),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ViewReportsScreen()),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
